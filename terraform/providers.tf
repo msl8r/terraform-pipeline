@@ -8,12 +8,10 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "terraform-state"
-#    storage_account_name = var.storage_account_name
+    storage_account_name = "tfstatemsl8r"
     container_name       = "tfstate"
-    key                  = "terraform.tfstate"
-#    subscription_id      = var.subscription_id
-#    tenant_id            = var.tenant_id
-#    use_oidc             = true
+    key                  = "terraform-oidc/terraform.tfstate"
+    use_oidc             = true
   }
 }
 
