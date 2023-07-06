@@ -59,7 +59,7 @@ jobs:
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        tenant-id: ${{ secrets.ARM_TENANT_ID }}
         subscription-id: f7ce4a37-e77e-4c69-8138-c668bdf0c994
 
     - name: Terraform Init
@@ -180,7 +180,7 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: f7ce4a37-e77e-4c69-8138-c668bdf0c994
 
       - name: chmod
