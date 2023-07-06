@@ -1,4 +1,4 @@
-resource "azurerm_resource_group" "this" {
+resource "azurerm_resource_group" "networking" {
   location = "uksouth"
   name     = "infra-networking"
 }
