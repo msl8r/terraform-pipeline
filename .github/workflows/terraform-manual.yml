@@ -135,7 +135,7 @@ jobs:
 
     - name: 'Upload terraform cache'
       uses: actions/upload-artifact@v3
-      if: ${{github.ref == 'refs/heads/master' && steps.plan.outcome == 'success'}}
+      if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
       with:
         name: terraform-cache-${{github.sha}}
         path: terraform/.terraform
@@ -143,7 +143,7 @@ jobs:
 
     - name: 'Upload lockfile'
       uses: actions/upload-artifact@v3
-      if: ${{github.ref == 'refs/heads/master' && steps.plan.outcome == 'success'}}
+      if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
       with:
         name: terraform-lock-${{github.sha}}
         path: terraform/.terraform.lock.hcl
