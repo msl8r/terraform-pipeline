@@ -72,7 +72,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color -lock=false -out=.terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
+      run: terraform plan -lock=false -out=.terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
@@ -180,12 +180,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: f7ce4a37-e77e-4c69-8138-c668bdf0c994
+
+      - name: chmod
         run: |
           chmod -R 777 .terraform/
-#
-#      - name: chmod
-#        run: |
-#          chmod -R 777 .terraform/
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
