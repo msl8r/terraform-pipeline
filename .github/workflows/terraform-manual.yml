@@ -147,6 +147,9 @@ jobs:
           }
 
 
+
+# TODO - if no changes, end workflow
+
     - name: 'Upload terraform plan'
       uses: actions/upload-artifact@v3
       if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
