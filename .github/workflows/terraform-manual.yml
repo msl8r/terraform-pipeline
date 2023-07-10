@@ -74,6 +74,9 @@ jobs:
       id: plan
       run: terraform plan -lock=false -out=.terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
 
+    - name: Adding markdown
+      run: echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
+
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       env:
@@ -157,6 +160,9 @@ jobs:
         working-directory: ${{ env.tf_actions_working_dir }}
     steps:
       - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{env.terraform_version}}
 
       - name: Get terraform cache
         uses: actions/download-artifact@v3
@@ -170,9 +176,15 @@ jobs:
           name: terraform-lock-${{github.sha}}
           path: terraform/
 
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{env.terraform_version}}
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Workspace
+        id: workspace
+        run: terraform workspace select -or-create ${{ github.event.inputs.environment }}
+
+
 
       - name: 'Az CLI login'
         uses: azure/login@v1
