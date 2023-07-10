@@ -78,7 +78,7 @@ jobs:
       run: |
         echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
         \`\`\`\n
-        ${process.env.PLAN}
+        ${{ steps.plan.outputs.stdout }}
         \`\`\`
 
     - uses: actions/github-script@v6
