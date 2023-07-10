@@ -55,6 +55,20 @@ jobs:
       with:
         terraform_version: ${{ env.terraform_version }}
 
+    - name: Config Terraform plugin cache
+      run: |
+        echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
+        mkdir --parents ~/.terraform.d/plugin-cache
+
+    - name: Cache Terraform
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.terraform.d/plugin-cache
+        key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+        restore-keys: |
+          ${{ runner.os }}-terraform-
+
     - name: Terraform Init
       id: init
       run: terraform init
@@ -132,6 +146,7 @@ jobs:
             })
           }
 
+
     - name: 'Upload terraform plan'
       uses: actions/upload-artifact@v3
       if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
@@ -148,20 +163,6 @@ jobs:
         name: terraform-lock-${{github.sha}}
         path: terraform/.terraform.lock.hcl
         retention-days: 2
-
-    - name: Config Terraform plugin cache
-      run: |
-        echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
-        mkdir --parents ~/.terraform.d/plugin-cache
-
-    - name: Cache Terraform
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.terraform.d/plugin-cache
-        key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
-        restore-keys: |
-          ${{ runner.os }}-terraform-
 
   apply:
     runs-on: ubuntu-latest
@@ -225,4 +226,3 @@ jobs:
         if: github.ref == 'refs/heads/main'
         id: apply
         run: terraform apply -no-color -input=false -auto-approve .terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}}
-
