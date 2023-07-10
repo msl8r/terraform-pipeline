@@ -156,7 +156,7 @@ jobs:
       with:
         name: terraform-plan-${{github.sha}}
         path: |
-          tfplan-${{github.event.inputs.environment}}-${{github.sha}}
+          terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}}
         retention-days: 2
 
     - name: 'Upload lockfile'
