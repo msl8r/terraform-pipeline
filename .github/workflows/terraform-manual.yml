@@ -77,9 +77,10 @@ jobs:
     - name: Adding markdown
       run: |
         echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
-        \\`\\`\\`\\n
-        ${{ steps.plan.outputs.stdout }}
-        \\`\\`\\`
+        echo -e "\`\`\`\n${process.env.PLAN}\n\`\`\`" >> $GITHUB_STEP_SUMMARY
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
