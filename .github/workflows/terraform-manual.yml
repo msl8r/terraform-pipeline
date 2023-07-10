@@ -69,10 +69,10 @@ jobs:
 
     - name: Adding markdown
       run: |
-        echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
+        echo '#### Terraform Plan 📖' >> $GITHUB_STEP_SUMMARY
         echo -e "\`\`\`\n${PLAN}\n\`\`\`" >> $GITHUB_STEP_SUMMARY
       env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        PLAN: "${{ steps.plan.outputs.stdout }}"
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
@@ -153,7 +153,7 @@ jobs:
       run: |
         echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
         mkdir --parents ~/.terraform.d/plugin-cache
-        
+
     - name: Cache Terraform
       uses: actions/cache@v3
       with:
@@ -201,7 +201,7 @@ jobs:
           key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
           restore-keys: |
             ${{ runner.os }}-terraform-
-          
+
       - name: Terraform Init
         id: init
         run: terraform init
