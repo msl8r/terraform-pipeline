@@ -228,4 +228,4 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         id: apply
-        run: terraform apply -no-color -input=false -auto-approve .terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}}
+        run: terraform apply -no-color -input=false -auto-approve tfplan-${{github.event.inputs.environment}}-${{github.sha}}
