@@ -75,7 +75,11 @@ jobs:
       run: terraform plan -lock=false -out=.terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
 
     - name: Adding markdown
-      run: echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
+      run: |
+        echo '#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`' >> $GITHUB_STEP_SUMMARY
+        \`\`\`\n
+        ${process.env.PLAN}
+        \`\`\`
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
