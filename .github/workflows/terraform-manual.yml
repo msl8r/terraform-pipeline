@@ -65,7 +65,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color -lock=false -out=.terraform/tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
+      run: terraform plan -no-color -lock=false -out=tfplan-${{github.event.inputs.environment}}-${{github.sha}} -input=false
 
     - name: Adding markdown
       run: |
@@ -132,23 +132,23 @@ jobs:
             })
           }
 
-#     - name: 'Upload terraform cache'
-#       uses: actions/upload-artifact@v3
-#       if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
-#       with:
-#         name: terraform-cache-${{github.sha}}
-#         path: |
-#           terraform/.terraform
-#           !terraform/.terraform/*.tfstate
-#         retention-days: 2
+    - name: 'Upload terraform plan'
+      uses: actions/upload-artifact@v3
+      if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
+      with:
+        name: terraform-plan-${{github.sha}}
+        path: |
+          tfplan-${{github.event.inputs.environment}}-${{github.sha}}
+        retention-days: 2
 
-#     - name: 'Upload lockfile'
-#       uses: actions/upload-artifact@v3
-#       if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
-#       with:
-#         name: terraform-lock-${{github.sha}}
-#         path: terraform/.terraform.lock.hcl
-#         retention-days: 2
+    - name: 'Upload lockfile'
+      uses: actions/upload-artifact@v3
+      if: ${{github.ref == 'refs/heads/main' && steps.plan.outcome == 'success'}}
+      with:
+        name: terraform-lock-${{github.sha}}
+        path: terraform/.terraform.lock.hcl
+        retention-days: 2
+
     - name: Config Terraform plugin cache
       run: |
         echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
@@ -176,17 +176,18 @@ jobs:
         with:
           terraform_version: ${{env.terraform_version}}
 
-#       - name: Get terraform cache
-#         uses: actions/download-artifact@v3
-#         with:
-#           name: terraform-cache-${{github.sha}}
-#           path: terraform/.terraform
+      - name: Get terraform plan
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan-${{github.sha}}
+          path: terraform/
 
 #       - name: Get terraform lockfile
 #         uses: actions/download-artifact@v3
 #         with:
 #           name: terraform-lock-${{github.sha}}
 #           path: terraform/
+
       - name: Config Terraform plugin cache
         run: |
           echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
