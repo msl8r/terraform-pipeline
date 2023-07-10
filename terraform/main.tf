@@ -17,3 +17,11 @@ resource "azurerm_key_vault" "this" {
   enable_rbac_authorization = true
 }
 
+resource "random_id" "this" {
+  byte_length = 8
+}
+
+resource "azurerm_resource_group" "new" {
+  location = "uksouth"
+  name     = random_id.this.id
+}
