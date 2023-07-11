@@ -69,13 +69,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-terraform-
 
-    - run: |
-        ls -la  ~/.terraform.d/plugin-cache/*/*/*/*
-        ls -la .terraform
-
     - name: Terraform Init
       id: init
       run: terraform init
+
+    - run: |
+        ls -la  ~/.terraform.d/plugin-cache/*/*/*/*
+        ls -la .terraform
 
     - name: Terraform Workspace
       id: workspace
