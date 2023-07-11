@@ -57,7 +57,7 @@ jobs:
 
     - name: Config Terraform plugin cache
       run: |
-        echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' >~/.terraformrc
+        echo 'plugin_cache_dir="$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
         mkdir --parents ~/.terraform.d/plugin-cache
 
     - name: Cache Terraform
@@ -170,6 +170,7 @@ jobs:
   apply:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
+    if: ${{ inputs.action == 'apply' }}
     needs: plan
     defaults:
       run:
